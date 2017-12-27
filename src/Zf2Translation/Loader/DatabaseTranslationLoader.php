@@ -36,8 +36,6 @@ class DatabaseTranslationLoader implements RemoteLoaderInterface
         $textDomain = new TextDomain();
         $sql        = new Sql($this->dbAdapter);
 
-  //      var_dump( $locale, $messageDomain );die();
-
         $messageDomain = 'database';
 
         $select = $sql->select();
@@ -45,19 +43,13 @@ class DatabaseTranslationLoader implements RemoteLoaderInterface
         $select->columns(array(
                 'message_key',
                 'message_translation',
-  //              'message_plural_index'
         ));
         $select->where(array(
                 'locale_id'      => $locale,
                 'message_domain' => $messageDomain,
                 'message_plural_index' => null,
         ));
-/*
-        $messages = $this->dbAdapter->query(
-                $sql->getSqlStringForSqlObject($select),
-                DbAdapter::QUERY_MODE_EXECUTE
-                );
-*/
+
         $stmt = $sql->prepareStatementForSqlObject($select);
         $resultSet = new ResultSet();
         $messages = $resultSet->initialize($stmt->execute());
@@ -65,8 +57,6 @@ class DatabaseTranslationLoader implements RemoteLoaderInterface
         foreach ($messages as $message) {
             $textDomain[$message['message_key']] = $message['message_translation'];
         }
-
-//var_dump(  $textDomain );die();
 
         return $textDomain;
     }

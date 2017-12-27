@@ -45,18 +45,10 @@ class DatabaseTranslationPluralLoader implements RemoteLoaderInterface
         $result = $resultSet->initialize($stmt->execute());
 
         $localeInformation = $result->current();
-/*
-        $localeInformation = $this->dbAdapter->query(
-                $sql->getSqlStringForSqlObject($select),
-                DbAdapter::QUERY_MODE_EXECUTE
-                );
-*/
+
         if (!count($localeInformation)) {
             return $textDomain;
         }
-
-      //  $localeInformation = reset($localeInformation);
-      //  $localeInformation = $localeInformation->current();
 
         $textDomain->setPluralRule(
                 PluralRule::fromString($localeInformation['locale_plural_forms'])
@@ -79,8 +71,6 @@ class DatabaseTranslationPluralLoader implements RemoteLoaderInterface
                 $sql->getSqlStringForSqlObject($select),
                 DbAdapter::QUERY_MODE_EXECUTE
                 );
-
-//var_dump( $messages );die();
 
         foreach ($messages as $message) {
             if (isset($textDomain[$message['message_key']])) {
